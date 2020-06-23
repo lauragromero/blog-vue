@@ -4,33 +4,28 @@
         <span>{{post.username}}</span>
         <span>{{post.date}}</span>
         <p>{{post.text}}</p>
-        <ul>
+        <div v-if="post.comments.length > 0">
+          <ul>
             <li v-for="comment of post.comments" :key="comment._id">
                 <h3>{{comment.username}}</h3>
                 <p>{{comment.comment}}</p>
             </li>
         </ul>
+        </div>
+        <div v-else>No comments </div>
+        
     </div>
 </template>
 
 <script>
-import getPostId from '../service/getPostId'
+import {mapState} from 'vuex'
 export default {
   name: 'PostDetail', 
-  data: () => {
-    return {
-        post: {}
-    };
-  },
-  async mounted () {
-    try {
-        const id = this.$route.params.id
-      this.post = await getPostId(id)
-    } catch (error) {
-      console.log(error)
-      this.errorMsg = error.message
-    }
-  },
+ async mounted () {
+   const id = this.$route.params.id
+   await this.$store.dispatch('getPostId', id)
+  },computed:{ 
+    ...mapState(['post'])},
 }
 </script>
 

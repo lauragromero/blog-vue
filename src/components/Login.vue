@@ -5,25 +5,33 @@
         password:
         <input type="password" name="password" v-model="password">
         <button @click="login()">Log-In</button>
+        <p>{{error}}</p>
     </div>
+    
 </template>
 
 <script>
 import login from '@/service/login';
+
 export default {
   name: 'PostList',
   data: () => {
     return {
         posts: [],
-        username: '', 
-        password: ''
+        username: null, 
+        password: null, 
+        error: null
     };
   },
   methods:{
-      login: async function(){
+      login:  async function(){
+        try {
         const user = {username: this.username, password: this.password}
-        console.log(user)
         await login(user)
+        await this.$router.push('Backoffice') 
+      } catch (error) {
+        this.error =  'soy un error';
+      }
     },
   }
 }

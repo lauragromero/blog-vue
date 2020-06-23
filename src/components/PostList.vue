@@ -12,23 +12,15 @@
     </div>
 </template>
 
+
 <script>
-import getAllPost from '@/service/getAllPost';
+import {mapState} from 'vuex'
 export default {
   name: 'PostList',
-  data: () => {
-    return {
-        posts: []
-    };
-  },
-  async mounted () {
-    try {
-      this.posts = await getAllPost()
-    } catch (error) {
-      console.log(error)
-      this.errorMsg = error.message
-    }
-  },
+ async mounted () {
+     await this.$store.dispatch('getAllPost')
+  },computed:{ 
+    ...mapState(['posts'])},
 }
 
 </script>

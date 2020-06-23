@@ -10,6 +10,7 @@ async function login (user) {
       }).then(response => {
         localStorage.setItem('token', response.data.token)})
         .catch(error=> {
+          error
         console.log('Error on Authentication', error);
       });
 }

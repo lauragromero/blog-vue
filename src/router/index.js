@@ -21,16 +21,33 @@ Vue.use(VueRouter)
     name: 'Login',
     component: () => import('../components/Login')
   },
+  {
+    path: '/backoffice',
+    name: 'Backoffice',
+    component: () => import('../components/Backoffice'), 
+    meta: {requieresAuth: true}
+  },
 
-  // {
-  //   path: '/home',
-  //   name: 'PostList',
-  //   component: () => import('../components/PostList')
-  // }
+  
+  
 ]
 
 const router = new VueRouter({
   routes
 })
+
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  if(to.meta.requieresAuth){
+    if (token) {
+          next();
+      } else {
+          next('/');
+      }
+  }else{
+    next();
+  }
+});
 
 export default router
