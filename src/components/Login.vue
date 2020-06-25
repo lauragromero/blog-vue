@@ -5,7 +5,7 @@
         password:
         <input type="password" name="password" v-model="password">
         <button @click="login()">Log-In</button>
-        <p>{{error}}</p>
+        <p>{{errorMsg}}</p>
     </div>
     
 </template>
@@ -20,20 +20,24 @@ export default {
         posts: [],
         username: null, 
         password: null, 
-        error: null
+        errorMsg: null
     };
   },
   methods:{
-      login:  async function(){
-        try {
-        const user = {username: this.username, password: this.password}
-        await login(user)
-        await this.$router.push('Backoffice') 
-      } catch (error) {
-        this.error =  'soy un error';
+
+async login () {
+      if (!this.username || !this.password) {
+        this.errorMsg = 'all fields are mandatory'
+      } else {
+         login(this.username, this.password)
+         .then(response=>{
+            localStorage.setItem('token', response.token)
+            this.$router.push('/admin')
+         })
+         .catch (error => this.errorMsg = error)
+        }
       }
-    },
-  }
+    }
 }
 </script>
 

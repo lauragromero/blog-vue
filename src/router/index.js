@@ -1,6 +1,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PostList from '../components/PostList.vue'
+import Backoffice from '../components/Backoffice'
+
+function guardMyroute(to, from, next){
+  let isAuthenticated= false;
+
+  if(localStorage.getItem('token')){
+    isAuthenticated = true;
+  }else{
+    isAuthenticated= false;
+  }
+    
+  if(isAuthenticated) {
+    next();
+  } else{
+    next('/login');
+  }
+}
+
 
 Vue.use(VueRouter)
 
@@ -22,12 +40,16 @@ Vue.use(VueRouter)
     component: () => import('../components/Login')
   },
   {
-    path: '/backoffice',
-    name: 'Backoffice',
-    component: () => import('../components/Backoffice'), 
-    meta: {requieresAuth: true}
+    path: '/admin',
+    name: 'admin',
+    beforeEnter : guardMyroute,
+    component: Backoffice
   },
-
+  {
+    path: '/admin/:id',
+    name: 'BackPostDetail',
+    component: () => import('../components/BackPostDetail')
+  },
   
   
 ]
@@ -37,17 +59,6 @@ const router = new VueRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  if(to.meta.requieresAuth){
-    if (token) {
-          next();
-      } else {
-          next('/');
-      }
-  }else{
-    next();
-  }
-});
+
 
 export default router
