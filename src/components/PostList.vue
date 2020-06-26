@@ -1,14 +1,11 @@
 <template>
     <div>
-        <ul> 
-        <li v-for="post in posts" :key="post._id">
-            <h2>{{post.title}}</h2>
-            <span>{{post.username}}</span>
-            <p>{{post.text}}</p>
-            <router-link :to="`/post/${post._id}`">More</router-link>
-
-            </li>
-        </ul>
+        <grid-layout>
+            <div v-for="post in posts" :key="post._id">
+                <post-component v-bind:titlePost.prop="post.title" v-bind:usernamePost.prop="post.username" v-bind:nicknamePost.prop="post.nickname" v-bind:datePost.prop="post.date"  v-bind:textPost.prop="post.text" v-on:selectPost="onSelec(post._id)"></post-component>
+                <!-- <button @click="onSelec(post._id)">ir</button> -->
+            </div>
+        </grid-layout>
     </div>
 </template>
 
@@ -17,8 +14,13 @@
 import {mapState} from 'vuex'
 export default {
   name: 'PostList',
- async mounted () {
-     await this.$store.dispatch('getAllPost')
+  methods:{
+    onSelec(id){
+      this.$router.push(`/post/${id}`)
+    }
+  },
+ mounted () {
+     this.$store.dispatch('getAllPost')
   },computed:{ 
     ...mapState(['posts'])},
 }
