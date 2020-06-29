@@ -1,13 +1,14 @@
 <template>
-<div>
-  <DataTable :value="posts"  >
+<div class="container__post">
+<div>Hi!  {{user.user}} you are {{user.role}}</div>
+  <DataTable :value="posts" :expandedRows.sync="expandedRows" dataKey="_id">
     <template #header>
         <div style="line-height:1.87em" class="p-clearfix">
             <Button  @click="addButton" label="Add Post" icon="pi pi-plus-circle" style="float: left, margin-left: 40px"/>
             LIST OF POST
         </div>
     </template>
-    <Column :expander="true" headerStyle="width: 3em" />
+    <Column :expander="true" headerStyle="width: 4em" />
     <Column style="width: 10em" field="username" header="Username" :sortable="true"></Column>
     <Column field="nickname" header="Nickname" :sortable="true"></Column>
     <Column field="date" header="date" :sortable="true"></Column>
@@ -16,16 +17,14 @@
         <template #header>
             <Button type="button" icon="pi pi-cog"></Button>
         </template>
-        <template #body= "slotProps">
-            <Button label="Detail" type="button" icon="pi pi-search" class="p-button-success p-button-sm" style="margin-right:0.2em" @click="goToDetail(slotProps.data._id)"></Button>
-            <Button  @click="editButton(slotProps.data._id)" label="Edit" type="button" icon="pi pi-pencil" class="p-button p-button-sm" style="margin-right:0.2em"></Button>
-            <Button @click="deleteThePost(slotProps.data._id)"  label="Delete" type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"></Button>
+        <template #body="slotProps">
+            <Button label="Detail" type="button" icon="pi pi-plus-circle" class="p-button-success p-button-sm" style="margin-right:0.2em" @click="goToDetail(slotProps.data._id)"></Button>
+            <Button :disabled="user.user !==slotProps.data.username && user.role !== 'admin'" @click="editButton(slotProps.data._id)" label="Edit" type="button" icon="pi pi-pencil" class="p-button p-button-sm" style="margin-right:0.2em"></Button>
+            <Button :disabled="user.user !==slotProps.data.username && user.role !== 'admin'" @click="deleteThePost(slotProps.data._id)"  label="Delete" type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"></Button>
         </template>
     </Column>
-    <template #expansion= "slotProps">
-        <div>
-              hollll  <p>{{slotProps.data.text}}</p>
-        </div>
+    <template #expansion="slotProps">
+            <p>{{slotProps.data.text}}</p>
     </template>
     <template #footer>
         In total there are {{posts ? posts.length : 0 }} post.
@@ -51,6 +50,8 @@
         <Button label="ADD" icon="pi pi-check" @click="addNewPost()" class="p-button-success"></Button>
     </template>
 </Dialog> 
+
+
 <Dialog :visible.sync="dialogVisible" :style="{width: '900px'}" header="Edit Post" :modal="true" >
     <div class="p-cardialog-content"> 
         <div class="p-grid p-fluid ">
@@ -80,7 +81,7 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Textarea from 'primevue/textarea';
-import 'primevue/resources/themes/vela-teal/theme.css';
+import 'primevue/resources/themes/vela-deeppurple/theme.css';
 import 'primeicons/primeicons.css'
 export default {
   name: 'Backoffice',
@@ -101,13 +102,13 @@ export default {
     dialogVisibleNew: false,
     dialogVisible: false,
     selectedPost: null,
+    expandedRows: []
     }
   },methods:{
     addNewPost(){
       const newPost = {title: this.newTitle, text: this.newText};
       this.$store.dispatch('addNewPost', newPost)
       this.dialogVisibleNew= false
-
     },
     deleteThePost(id){
       this.$store.dispatch('deletePost', id)
@@ -122,17 +123,18 @@ export default {
     },addButton(){
       this.dialogVisibleNew = true;
     },goToDetail(id){
-      this.$router.push(`/post/${id}`)
+      this.$router.push(`/admin/${id}`)
     }
   },
    mounted () {
-     this.$store.dispatch('getAllPost')
+     this.$store.dispatch('getAllPost');
+     this.$store.dispatch('getToken');
   },computed:{ 
-    ...mapState(['posts'])},
+    ...mapState(['posts', 'user'])},
+    
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 form{
   display: flex; 
@@ -147,5 +149,8 @@ ul {
 .p-cardialog-content{
   padding: 0;
 }
-
+.container__post{
+  max-width: 1300px;
+  margin: 0 auto;
+}
 </style>

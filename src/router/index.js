@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import PostList from '../components/PostList.vue'
-import Backoffice from '../components/Backoffice'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Backoffice from '../components/Backoffice';
+import PostList from '../components/PostList.vue';
 
-function guardMyroute(to, from, next){
+function authenticatedRoute(to, from, next){
   let isAuthenticated= false;
 
   if(localStorage.getItem('token')){
@@ -42,7 +42,7 @@ Vue.use(VueRouter)
   {
     path: '/admin',
     name: 'admin',
-    beforeEnter : guardMyroute,
+    beforeEnter : authenticatedRoute,
     component: Backoffice
   },
   {

@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "blog-stencil": "file:../blog-stencil",
     "core-js": "^3.6.5",
+    "jwt-decode": "^2.2.0",
     "primeicons": "^4.0.0",
     "primevue": "^2.0.0-rc.1",
     "vue": "^2.6.11",
