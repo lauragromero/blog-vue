@@ -1,27 +1,27 @@
 <template>
   <div class="user__container">
-    <form>
-       <span> User already registered</span>
+    <form class="log__form">
+       <span class="header__container"> Already registered?</span>
         <label for="username">Username</label>
         <input  id="username" type="text" name="username" v-model="username">
         <label for="password">Password</label>
         <input  id="password" type="password" name="password" v-model="password">
-        <button @click.prevent="login()">Log-In</button>
-        <p>{{errorMsgLog}}</p>
+        <button  class="button_primary" @click.prevent="login()">Log-In</button>
+        <p class="error_container">{{errorMsgLog}}</p>
        
 
     </form>
     <form>
-        <span> Create a New User</span>
+        <span class="header__container"> Create a New User</span>
         <label for="newUsername">Username</label>
         <input  id="newUsername" type="text" name="newUsername" v-model="newUsername">
         <label for="newNickname">Nickname</label>
         <input  id="newNickname" type="text" name="newNickname" v-model="newNickname">
          <label for="newPassword">Password</label>
         <input  id="newPassword" type="password" name="newPassword" v-model="newPassword">
-        <button @click.prevent="singin()">Sing-In</button>
-        <p>{{errorMsg}}</p>
-         <p>{{okMessage}}</p>
+        <button class="button_primary" @click.prevent="singin()">Sing-In</button>
+        <p class="error_container">{{errorMsg}}</p>
+        <p class="error_container">{{okMessage}}</p>
     </form>
   </div>
 </template>
@@ -98,8 +98,44 @@ form{
   background-color: #ffffff;
   border-radius: 4px;
   width: 400px;
-  height: 300px;
   padding: 20px;
+  height: auto;
+  max-height: 380px;
 
+}
+.log__form{
+  max-height: 300px;
+}
+input{
+ margin: 10px 0;
+ display: inline-block;
+ height: 30px;
+}
+
+.button_primary{
+  margin: 10px auto;
+  width: 150px;
+  height: 40px;
+  background-color: #f15493;
+  border: 1px solid  #f15493;
+  color:rgb(255, 255, 255);
+  text-transform: uppercase;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 1s ease;
+}
+.button_primary:hover{
+ 
+  color: #f15493;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid  #f15493;
+}
+.header__container{
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.error_container{
+  color: red;
 }
 </style>

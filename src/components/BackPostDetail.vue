@@ -5,8 +5,7 @@
           <h2>{{post.title}}</h2>
         </template>
         <template slot="subtitle">
-          <span>{{post.username}}</span>
-          <span>{{post.date}}</span>
+          <span>{{post.username}} {{format_date(post.date)}}</span>
         </template> 
     <template slot="content">
        <p>{{post.text}}</p>
@@ -68,6 +67,7 @@ import Textarea from 'primevue/textarea';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import {mapState} from 'vuex'
+import moment from 'moment'
 export default {
   name: 'BackPostDetail', 
   components:{
@@ -101,14 +101,18 @@ export default {
       this.dialogVisibleNew = true;
       this.id = idComment;
     }, updateComment(){
-      console.log(this.id)
       const newComment = {comment : this.newComment}
       const payload = {id: this.id, comment: newComment}
       this.$store.dispatch('updateNewComment', payload)
       this.dialogVisibleNew = false;
     }, deleteComment(idComment){
       this.$store.dispatch('deleteCommentId', idComment)
-    }
+    },format_date(value){
+         if (value) {
+           return moment(String(value)).format('MM/DD/YYYY hh:mm')
+          }
+      
+   },
 
   },
   mounted () {
